@@ -5,7 +5,7 @@ import pygame
 import numpy as np
 import game.flappy_bird_utils as flappy_bird_utils
 
-os.chdir(r'C:\Users\ASUS\Desktop\lovetea\6_sem\My_ML\HW_6')
+os.chdir(r'C:\Users\ASUS\Desktop\lovetea\6_sem\My_ML\ML_HW\Luyluyshkina_Spasova-hw06')
 
 
 class FlappyEnvironment:

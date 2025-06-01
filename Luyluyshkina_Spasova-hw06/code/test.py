@@ -6,7 +6,7 @@ from model import FlappyDQN
 from tools import preprocess_image, stack_images, DEVICE
 
 def evaluate_model():
-    env = FlappyEnvironment(for_model=True)
+    env = FlappyEnvironment(for_model=False)
     model = FlappyDQN().to(DEVICE)
     try:
         model.load_state_dict(torch.load("flappy_model_final.pth", map_location=DEVICE))
@@ -20,7 +20,7 @@ def evaluate_model():
     episode = 0
 
     while max_score < 100:
-        env = FlappyEnvironment(for_model=True)
+        env = FlappyEnvironment(for_model=False)
         frame_buffer.clear()
         score = 0
         done = False

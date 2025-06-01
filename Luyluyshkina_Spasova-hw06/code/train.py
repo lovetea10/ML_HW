@@ -1,4 +1,5 @@
 import pygame
+import wandb
 import torch
 import torch.optim as optim
 import torch.nn as nn
@@ -34,6 +35,18 @@ PLAYER_INDEX_GEN = cycle([0, 1, 2, 1])
 os.chdir(r'C:\Users\ASUS\Desktop\lovetea\6_sem\My_ML\ML_HW')
 
 def train_model():
+    session_id = int(time.time())
+    wandb.init(
+        project="flappy-bird-dqn",
+        name=f"training-session-{session_id}",
+        config={
+            "gamma": 0.99,
+            "epsilon_start": 1.0,
+            "epsilon_end": 0.01,
+            "batch_size": 64,
+            "lr": 2e-4,
+        }
+    )
     env = FlappyEnvironment(for_model=False)
     model = FlappyDQN().to(DEVICE)
     target_model = FlappyDQN().to(DEVICE)
@@ -50,8 +63,9 @@ def train_model():
     start_time = time.time()
     total_pipes = 0
 
+    wandb.watch(model, log="all")
     for episode in range(5000):
-        # Re-initialize the environment
+
         env = FlappyEnvironment(for_model=False)
         frame_buffer = deque(maxlen=4)
         total_reward = 0
@@ -116,6 +130,16 @@ def train_model():
             state = next_state
 
             elapsed_time = time.time() - start_time
+
+            wandb.log({
+                "Episode": episode + 1,
+                "Pipes Passed": total_pipes,
+                "Max Score": max_score,
+                "Reward": total_reward,
+                "Epsilon": epsilon,
+                "Loss": loss.item() if 'loss' in locals() else 0,
+                "Time (sec)": elapsed_time
+            })
             print(f"Сессия: {session_id} | Эпизод: {episode + 1:4d}/5000 | "
                   f"Пройдено труб: {total_pipes:3d} | Макс. рекорд: {max_score:3d} | "
                   f"Награда: {total_reward:.2f} | Epsilon: {epsilon:.3f} | "
@@ -134,14 +158,20 @@ def train_model():
               f"Время: {elapsed_time:.2f} сек")
 
         if max_score >= 100:
-            torch.save(model.state_dict(), f"flappy_model_{session_id}_score{max_score}.pth")
+            model_name = f"flappy_model_{session_id}_score{max_score}.pth"
+            torch.save(model.state_dict(), model_name)
+            wandb.save(model_name)
             print(f"Модель сохранена с рекордом {max_score}!")
             break
 
         if (episode + 1) % 1000 == 0:
-            torch.save(model.state_dict(), f"flappy_model_{session_id}_ep{episode + 1}.pth")
+            model_name = f"flappy_model_{session_id}_ep{episode + 1}.pth"
+            torch.save(model.state_dict(), model_name)
+            wandb.save(model_name)
 
     torch.save(model.state_dict(), "flappy_model_final.pth")
+    wandb.save("flappy_model_final.pth")
+    wandb.finish()
     print("Обучение завершено. Финальная модель сохранена.")
 
 if __name__ == "__main__":
