@@ -16,7 +16,6 @@ BACKGROUNDS_LIST = (
 
 BACKGROUNDS_LIST_FOR_MODEL = 'Flappy_Bird_assets/Game Objects/background-black.png'
 
-# List of pipes
 PIPES_LIST = (
     'Flappy_Bird_assets/Game Objects/pipe-green.png',
 )

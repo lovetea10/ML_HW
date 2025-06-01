@@ -16,7 +16,7 @@ class FlappyEnvironment:
         self.basex = 0
         self.baseShift = IMAGES['base'].get_width() - BACKGROUND_WIDTH
         self.for_model = for_model
-        self.pipes_passed = 0  # Счетчик пройденных труб
+        self.pipes_passed = 0
 
         self.pipeVelX = pipe_speed
         self.playerFlapAcc = flap_speed
@@ -27,7 +27,7 @@ class FlappyEnvironment:
         self.playerMinVelY = -8
         self.playerAccY = 1
         self.playerFlapped = False
-        self.playerRot = 45
+        self.playerRot = 40
         self.playerRotThr = 20
         self.flap_count = 0
 
@@ -45,13 +45,12 @@ class FlappyEnvironment:
     def frame_step(self, input_actions):
         pygame.event.pump()
 
-        reward = 0.1  # Базовая награда за выживание
+        reward = 0.1
         terminal = False
 
         if sum(input_actions) != 1:
             raise ValueError('Multiple input actions!')
 
-        # Обработка действия "взмах"
         if input_actions[1] == 1:
             if self.playery > -2 * PLAYER_HEIGHT:
                 self.playerVelY = self.playerFlapAcc
@@ -59,41 +58,35 @@ class FlappyEnvironment:
                 self.flap_count += 1
                 SOUNDS['wing'].play()
 
-        # Проверка прохождения трубы
         playerMidPos = self.playerx + PLAYER_WIDTH / 2
         for pipe in self.upperPipes:
             pipeMidPos = pipe['x'] + PIPE_WIDTH / 2
             if pipeMidPos <= playerMidPos < pipeMidPos + 4:
                 self.score += 1
                 self.pipes_passed += 1
-                reward += 5.0  # Награда за прохождение трубы
+                reward += 5.0
                 SOUNDS['point'].play()
 
-        # Находим ближайшую трубу
         closest_pipe_idx = 0
         for i, pipe in enumerate(self.upperPipes):
             if pipe['x'] + PIPE_WIDTH > self.playerx:
                 closest_pipe_idx = i
                 break
 
-        # Рассчитываем центр зазора между трубами
         upper_pipe_y = self.upperPipes[closest_pipe_idx]['y']
         lower_pipe_y = self.lowerPipes[closest_pipe_idx]['y']
         gap_center = (upper_pipe_y + PIPE_HEIGHT + lower_pipe_y) / 2
         bird_center = self.playery + PLAYER_HEIGHT / 2
         distance_to_gap = abs(bird_center - gap_center)
 
-        # Награда за близость к центру зазора (главный фактор)
         proximity_reward = max(0, 2.0 - distance_to_gap / 20.0)
         reward += proximity_reward
 
-        # Анимация птицы
         if (self.loopIter + 1) % 3 == 0:
             self.playerIndex = next(PLAYER_INDEX_GEN)
         self.loopIter = (self.loopIter + 1) % 30
         self.basex = -((-self.basex + 100) % self.baseShift)
 
-        # Физика птицы
         if self.playerRot > -90:
             self.playerRot -= self.playerVelRot
 
@@ -107,53 +100,45 @@ class FlappyEnvironment:
         if self.playery < 0:
             self.playery = 0
 
-        # Движение труб
         for uPipe, lPipe in zip(self.upperPipes, self.lowerPipes):
             uPipe['x'] += self.pipeVelX
             lPipe['x'] += self.pipeVelX
 
-        # Добавление новых труб
         if 0 < self.upperPipes[0]['x'] < 5:
             newPipe = getRandomPipe()
             self.upperPipes.append(newPipe[0])
             self.lowerPipes.append(newPipe[1])
 
-        # Удаление пройденных труб
         if self.upperPipes[0]['x'] < -PIPE_WIDTH:
             self.upperPipes.pop(0)
             self.lowerPipes.pop(0)
 
-        # Проверка столкновений
         isCrash = checkCrash({'x': self.playerx, 'y': self.playery, 'index': self.playerIndex},
                              self.upperPipes, self.lowerPipes)
 
-        # Оптимизированные безопасные зоны
-        safe_zone_top = SCREENHEIGHT * 0.3  # Верхняя граница безопасной зоны
-        safe_zone_bottom = BASEY - PLAYER_HEIGHT - 30  # Нижняя граница безопасной зоны
+        safe_zone_top = SCREENHEIGHT * 0.3
+        safe_zone_bottom = BASEY - PLAYER_HEIGHT - 30
         optimal_zone_center = (safe_zone_top + safe_zone_bottom) / 2
 
-        # Штраф за выход из безопасной зоны (но не смерть)
         if self.playery < safe_zone_top or self.playery > safe_zone_bottom:
             height_penalty = -0.1 * abs(self.playery - optimal_zone_center) / (SCREENHEIGHT / 2)
             reward += height_penalty
 
-        # Столкновение
         if isCrash:
             terminal = True
             SOUNDS['hit'].play()
             SOUNDS['die'].play()
-            reward = -10.0  # Уменьшенный штраф за смерть
+            reward = -10.0
             self.__init__(for_model=self.for_model, pipe_speed=self.pipeVelX,
                           flap_speed=self.playerFlapAcc, rot_speed=self.playerVelRot)
 
-        # Отрисовка (только если не для модели)
         if not self.for_model:
             SCREEN.blit(IMAGES['background'], (0, 0))
             for uPipe, lPipe in zip(self.upperPipes, self.lowerPipes):
                 SCREEN.blit(IMAGES['pipe'][0], (uPipe['x'], uPipe['y']))
                 SCREEN.blit(IMAGES['pipe'][1], (lPipe['x'], lPipe['y']))
             SCREEN.blit(IMAGES['base'], (self.basex, BASEY))
-            showScore(self.pipes_passed)  # Показываем количество пройденных труб
+            showScore(self.pipes_passed)
 
             visibleRot = self.playerRotThr
             if self.playerRot <= self.playerRotThr:
@@ -162,7 +147,6 @@ class FlappyEnvironment:
             SCREEN.blit(playerSurface, (self.playerx, self.playery))
             pygame.display.update()
 
-        # Подготовка данных для модели
         SCREEN_for_model = SCREEN.copy()
         SCREEN_for_model.blit(IMAGES['background_for_model'], (0, 0))
         for uPipe, lPipe in zip(self.upperPipes, self.lowerPipes):
@@ -177,8 +161,6 @@ class FlappyEnvironment:
 
         return image_data, reward, terminal, self.pipes_passed
 
-
-# Остальной код без изменений
 FPS = 30
 SCREENWIDTH = 288
 SCREENHEIGHT = 512

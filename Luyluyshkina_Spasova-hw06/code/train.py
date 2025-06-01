@@ -64,7 +64,7 @@ def train_model():
     total_pipes = 0
 
     wandb.watch(model, log="all")
-    for episode in range(5000):
+    for episode in range(1000):
 
         env = FlappyEnvironment(for_model=False)
         frame_buffer = deque(maxlen=4)
