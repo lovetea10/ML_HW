@@ -5,6 +5,10 @@ ML_HW (Alina and Ksenia)
 
 # ML_HW_6:
 ML_HW (Alina and Ksenia)
+ссылка на обученную модель(facenet_model) https://drive.google.com/file/d/1pgLs12_MwXIHOWDwNuy-CRmyaW-pqbwy/view?usp=sharing
+Weight and biases https://wandb.ai/lulushkina-alina-it/face-recognition/runs/ptgj0100?nw=nwuserlulushkinaalina
+# ML_HW_6:
+ML_HW (Alina and Ksenia)
 
 ссылка на обученную модель (flappy_model_final) https://drive.google.com/file/d/1u_CcEVYzTnGlQzpuDI3Zkz-J8JcHUgts/view?usp=drive_link
 
