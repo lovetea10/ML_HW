@@ -1,0 +1,22 @@
+# Основные зависимости
+torch
+torchvision==0.18.1
+facenet-pytorch==2.5.3
+
+# Обработка изображений
+opencv-python==4.8.0.76
+pillow==10.0.0
+albumentations==1.3.1
+
+# Вспомогательные
+numpy==1.26.4
+tqdm==4.66.1
+scikit-learn==1.3.0
+matplotlib==3.7.2
+
+# Для MTCNN (детекция лиц)
+mtcnn==0.1.1
+
+# Визуализация и логирование
+wandb==0.16.3
+tensorboard==2.16.2

@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c80ee460-a672-491d-acac-205aabf16b3d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/logs/debug-internal.log" beforeDir="false" afterPath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/logs/debug-internal.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/logs/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/logs/debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/run-j7cchff4.wandb" beforeDir="false" afterPath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/run-j7cchff4.wandb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/files/config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/files/output.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/files/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/files/wandb-metadata.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/files/wandb-summary.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/logs/debug-internal.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/logs/debug.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wandb/run-20250601_170115-j7cchff4/run-j7cchff4.wandb" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +46,7 @@
     "Python.wr_flappy.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/ASUS/Desktop/lovetea/6_sem/ml_homework_8sem-main/hw6",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
